@@ -18,4 +18,5 @@ trait ResponseTrait
             "success"   => $this->success,
         ];
     }
+    
 }

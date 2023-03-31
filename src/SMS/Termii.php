@@ -6,12 +6,12 @@ namespace Raadaapartners\Raadaabase\SMS;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Raadaa\RaadaaBase\SMS\Helpers\PhoneHelper;
+use Raadaapartners\Raadaabase\Helpers\ManagePhone;
 use Raadaapartners\Raadaabase\SMS\Helpers\ResponseTrait;
 
 class Termii
 {
-    use ResponseTrait;
+    use ResponseTrait, ManagePhone;
 
     private string $text;
     private string $sender_name;
@@ -34,9 +34,8 @@ class Termii
     {
         try {
             $url = "https://api.ng.termii.com/api/sms/send";
-            $recipient = (new PhoneHelper($this->number))->handle();
             $data = [
-                'to' => $recipient,
+                'to' => $this->formatNumber($this->number),
                 'from' => $this->sender_name,
                 'sms' => $this->text,
                 'type' => $this->message_type,

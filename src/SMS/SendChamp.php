@@ -6,12 +6,12 @@ namespace Raadaapartners\Raadaabase\SMS;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Raadaa\RaadaaBase\SMS\Helpers\PhoneHelper;
+use Raadaapartners\Raadaabase\Helpers\ManagePhone;
 use Raadaapartners\Raadaabase\SMS\Helpers\ResponseTrait;
 
 class SendChamp
 {
-    use ResponseTrait;
+    use ResponseTrait, ManagePhone;
 
     private string $text;
     private string $sender_name;
@@ -59,9 +59,8 @@ class SendChamp
     private function processNumbers()
     {
         foreach ($this->numbers as $number) {
-            $format = (new PhoneHelper($number))->handle();
-            if ($format['success'])
-                array_push($this->formattedNumbers, $format['data']);
+            $format = $this->formatNumber($number);
+            array_push($this->formattedNumbers, $format);
         }
     }
 
