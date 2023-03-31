@@ -57,5 +57,8 @@ class RaadaabaseServiceProvider extends ServiceProvider
         $this->app->singleton('raadaabase', function () {
             return new Raadaabase;
         });
+        $this->app->bind('raadaabase', function($app) {
+            return new Raadaabase();
+        });
     }
 }

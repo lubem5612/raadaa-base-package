@@ -1,13 +1,12 @@
 <?php
 
-namespace Raadaapartners\Raadaabase;
+
+namespace Raadaapartners\Raadaabase\Facades;
+
 
 use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Raadaapartners\Raadaabase\Skeleton\SkeletonClass
- */
-class RaadaabaseFacade extends Facade
+class Raadaabase extends Facade
 {
     /**
      * Get the registered name of the component.

@@ -48,7 +48,7 @@
                 "Raadaapartners\\Raadaabase\\RaadaabaseServiceProvider"
             ],
             "aliases": {
-                "Raadaabase": "Raadaapartners\\Raadaabase\\RaadaabaseFacade"
+                "Raadaabase": "Raadaapartners\\Raadaabase\\Facades\\Raadaabase"
             }
         }
     },
