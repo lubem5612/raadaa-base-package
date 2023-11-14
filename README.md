@@ -43,7 +43,7 @@ the model which created the initial image and the column storing the path to the
 
 ```php
 $user = User::find($id);
-$response = $uploader->uploadFile($request->file('file_key'), 'folder_to_store_image', $user, 'image');
+$response = $uploader->uploadOrReplaceFile($request->file('file_key'), 'folder_to_store_image', $user, 'image');
 if ($response['success']) {
      $user->image = $response['upload_url'];
      $user->save();
