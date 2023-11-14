@@ -29,6 +29,12 @@ This will upload a new file without deleting existing one associated with a colu
 
 ```php
 $response = $uploader->uploadFile($request->file('file_key'), 'folder_to_store_image');
+if ($response['success']) {
+     Blog::create([ 
+        'title' => 'Welcome here', 
+        'image' => $response['upload_url'],
+     ]);
+}
 ```
 #### Editing or Replacing an Uploaded File
 
@@ -38,6 +44,10 @@ the model which created the initial image and the column storing the path to the
 ```php
 $user = User::find($id);
 $response = $uploader->uploadFile($request->file('file_key'), 'folder_to_store_image', $user, 'image');
+if ($response['success']) {
+     $user->image = $response['upload_url'];
+     $user->save();
+}
 ```
 it is assumed here that the users table has a column called `image` where the file path to an uploaded file is stored.
 
@@ -47,6 +57,9 @@ This will delete an uploaded file using the file path stored in the associated t
 
 ```php
 $response = $uploader->deleteFile('path_to_uploaded_file_from_associated_table_column');
+if ($response['success']) {
+    // do something when image is deleted successfully
+}
 ```
 
 ### Testing
