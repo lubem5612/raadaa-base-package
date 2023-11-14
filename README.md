@@ -16,8 +16,34 @@ composer require raadaa-partners/raadaa-base
 
 ## Usage
 
+### File Upload
+This package has a file uploader out of the box for these drivers: local, azure and amazon s3. Obtain an instance of the file upload helper to start using the methods. The file upload 
+helper has three methods `uploadFile`, `uploadOrReplaceFile` and `deleteFile`
 ```php
-// Usage description here
+$uploader = new UploadHelper();
+```
+
+- Fresh File Upload
+<br>
+This will upload a new file without deleting existing one associated with a column storing the path to the file. This should be used when creating a new resource that has image upload.
+```php
+$response = $uploader->uploadFile($request->file('file_key'), 'folder_to_store_image');
+```
+- Editing or Replacing an Uploaded File
+<br>
+This will first delete an existing file if it exists and then upload a new file associated with a column storing the path to the file in a specified model table. This should be used when updating an existing resource. The args are the UploadedFile instance, the folder to store the new image,
+the model which created the initial image and the column storing the path to the image to be replaced
+```php
+$user = User::find($id);
+$response = $uploader->uploadFile($request->file('file_key'), 'folder_to_store_image', $user, 'image');
+```
+it is assumed here that the users table has a column called `image` where the file path to an uploaded file is stored.
+
+- Deleting Uploaded File
+<br>
+This will delete an uploaded file using the file path stored in the associated table
+```php
+$response = $uploader->deleteFile('path_to_uploaded_file_from_associated_table_column');
 ```
 
 ### Testing
