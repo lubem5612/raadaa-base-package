@@ -6,7 +6,7 @@ use \RaadaaPartners\RaadaaBase\Http\Controllers\ResourceController;
 Route::group(['as' => 'raadaa.'], function () {
     //resource controller routes
     Route::as('resources.')->prefix('general')->group(function () {
-        Route::post('{endpoint}', [ResourceController::class, 'store'])->name('store');
+        Route::get('{endpoint}', [ResourceController::class, 'index'])->name('index');
         Route::post('{endpoint}', [ResourceController::class, 'store'])->name('store');
         Route::get('{endpoint}/{id}', [ResourceController::class, 'show'])->name('show');
         Route::match(['POST', 'PATCH', 'PUT'],'{endpoint}/{id}', [ResourceController::class, 'update'])->name('update');
