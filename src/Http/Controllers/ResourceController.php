@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use RaadaaPartners\RaadaaBase\Actions\Resource\CreateResource;
 use RaadaaPartners\RaadaaBase\Actions\Resource\DeleteResource;
 use RaadaaPartners\RaadaaBase\Actions\Resource\GetResource;
+use RaadaaPartners\RaadaaBase\Actions\Resource\SearchResource;
 use RaadaaPartners\RaadaaBase\Actions\Resource\UpdateResource;
 
 class ResourceController extends Controller
@@ -19,7 +20,7 @@ class ResourceController extends Controller
 
     public function index($endpoint)
     {
-        return (new \SearchResource(['endpoint' => $endpoint]))->execute();
+        return (new SearchResource(['endpoint' => $endpoint]))->execute();
     }
 
     /**

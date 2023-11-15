@@ -67,7 +67,7 @@ class RaadaaBaseServiceProvider extends ServiceProvider
         ], 'raadaa-filesystems');
 
         $this->publishes([
-            __DIR__ . '/../config/SearchResource.php' => config_path('searchparams.php'),
+            __DIR__ . '/../config/SearchTerm.php' => config_path('searchparams.php'),
         ], 'raadaa-search');
     }
 
