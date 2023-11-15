@@ -65,6 +65,10 @@ class RaadaaBaseServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/filesystems.php' => config_path('filesystems.php'),
         ], 'raadaa-filesystems');
+
+        $this->publishes([
+            __DIR__ . '/../config/SearchResource.php' => config_path('searchparams.php'),
+        ], 'raadaa-search');
     }
 
     protected function registerRoutes()

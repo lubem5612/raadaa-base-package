@@ -17,6 +17,11 @@ class ResourceController extends Controller
         $this->middleware('auth:sanctum')->except(['index', 'show']);
     }
 
+    public function index($endpoint)
+    {
+        return (new \SearchResource(['endpoint' => $endpoint]))->execute();
+    }
+
     /**
      * Create a new resource
      *
