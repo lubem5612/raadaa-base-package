@@ -4,6 +4,7 @@
 namespace RaadaaPartners\RaadaaBase\Actions\Flutterwave;
 
 
+use Illuminate\Encryption\Encrypter;
 use RaadaaPartners\RaadaaBase\Actions\Action;
 use RaadaaPartners\RaadaaBase\Helpers\FlutterwaveHelper;
 use RaadaaPartners\RaadaaBase\Helpers\SessionHelper;
@@ -12,7 +13,7 @@ use RaadaaPartners\RaadaaBase\Helpers\SessionHelper;
 class InitiateCardPayment extends Action
 {
     use SessionHelper;
-    private $request, $validatedData, $chargeCard;
+    private $request, $validatedData, $chargeCard, $encrytedData;
 
     public function __construct(array $request)
     {
@@ -21,25 +22,31 @@ class InitiateCardPayment extends Action
 
     public function handle()
     {
-        return $this
-            ->validateRequest()
-            ->setReference()
-            ->setEmail()
-            ->setUserName()
-            ->setCurrency()
-            ->setRedirectUrl()
-            ->chargeCard()
-            ->sendSuccess($this->chargeCard, 'card transaction initiated successfully');
+        $this->validateRequest();
+        $this->setReference();
+        $this->setEmail();
+        $this->setUserName();
+        $this->setCurrency();
+        $this->setRedirectUrl();
+        $this->encryptPayloadData();
+        return $this->chargeCard();
+        return $this->sendSuccess($this->chargeCard, 'card transaction initiated successfully');
+    }
+
+    private function encryptPayloadData()
+    {
+        $encrypter = new Encrypter(config('raadaa.flutterwave.encryption_key'), 'AES-256-CBC');
+        $this->encrytedData = $encrypter->encrypt( $this->validatedData );
+//        $decrypted = $newEncrypter->decrypt( $encrypted );
     }
 
     private function chargeCard()
     {
-        $this->chargeCard = (new FlutterwaveHelper([
+        return $this->chargeCard = (new FlutterwaveHelper([
             'method' => 'POST',
             'url' => '/charges?type=card',
-            'data' => $this->validatedData,
+            'data' => $this->encrytedData,
         ]))->execute();
-        return $this;
     }
 
     private function setCurrency()
@@ -47,19 +54,16 @@ class InitiateCardPayment extends Action
         if (!array_key_exists('currency', $this->validatedData)) {
             $this->validatedData['currency'] = "NGN";
         }
-        return $this;
     }
 
     private function setReference()
     {
         $this->validatedData['tx_ref'] = $this->generateReference();
-        return $this;
     }
 
     private function setRedirectUrl()
     {
         $this->validatedData['redirect_url'] = route('flutterwave.redirect', ['id' => auth()->id()]);
-        return $this;
     }
 
     private function setEmail()
@@ -67,7 +71,6 @@ class InitiateCardPayment extends Action
         if (!array_key_exists('email', $this->validatedData)) {
             $this->validatedData['email'] = auth()->user()->email;
         }
-        return $this;
     }
 
     private function setUserName()
@@ -75,7 +78,6 @@ class InitiateCardPayment extends Action
         if (!array_key_exists('fullname', $this->validatedData)) {
             $this->validatedData['fullname'] = auth()->user()->name;
         }
-        return $this;
     }
 
     private function validateRequest()
@@ -90,6 +92,5 @@ class InitiateCardPayment extends Action
             "fullname" => "nullable|string",
             "email" => "nullable",
         ]);
-        return $this;
     }
 }

@@ -5,10 +5,10 @@ namespace RaadaaPartners\RaadaaBase\Helpers;
 
 
 use Illuminate\Support\Facades\Http;
-use RaadaaPartners\RaadaaBase\Actions\Action;
 
-class FlutterwaveHelper extends Action
+class FlutterwaveHelper
 {
+    use ValidationHelper, ResponseHelper;
     private $request, $validatedData, $response;
 
     public function __construct(array $request)
@@ -16,11 +16,15 @@ class FlutterwaveHelper extends Action
         $this->request = $request;
     }
 
-    public function handle()
+    public function execute()
     {
-        $this->validateRequest();
-        $this->initiateTransfer();
-        return $this->buildResponse();
+        try {
+            $this->validateRequest();
+            $this->initiateTransfer();
+            return $this->processResponse();
+        }catch (\Exception $exception) {
+            return $this->sendServerError($exception);
+        }
     }
 
     private function initiateTransfer()
@@ -58,7 +62,7 @@ class FlutterwaveHelper extends Action
         return $this;
     }
 
-    private function buildResponse()
+    public function processResponse()
     {
         if ($this->response['status'] == "success") {
             return [
