@@ -30,4 +30,11 @@ trait PhoneHelper
         $intFormat = $this->getInternationalNumber($phone);
         return Str::after($intFormat, '+');
     }
+
+    public function localLocal($phone)
+    {
+        $intFormat = $this->getInternationalNumber($phone);
+        $format = Str::after($intFormat, '+234');
+        return Str::start($format, '0');
+    }
 }

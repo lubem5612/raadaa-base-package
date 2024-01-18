@@ -6,7 +6,7 @@ namespace RaadaaPartners\RaadaaBase\Helpers;
 
 use Illuminate\Support\Str;
 
-class UuidHelper
+trait UuidHelper
 {
     /**
      * The "booting" method of the model, This help to magically create uuid for all new models
