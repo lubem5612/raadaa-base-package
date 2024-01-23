@@ -23,7 +23,6 @@ return [
      | DELETE: {endpoint}/{id} for deleting a specified resource from storage
      |
      */
-
     'routes' => [
 //        'users' => [
 //            'model' =>\App\Models\User::class,
@@ -46,5 +45,13 @@ return [
 //            ],
 //            'relationships' => [],
 //        ],
-    ]
+    ],
+
+    /*
+     |
+     | Add prefix to the routes to avoid conflicts with other routes. example /api/{prefix}/
+     | Defaults to /api/general/..
+     |
+     */
+    'prefix' => 'general'
 ];
