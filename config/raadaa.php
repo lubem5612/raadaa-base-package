@@ -50,5 +50,7 @@ return [
     'local' => [
         'storage_url' => '',
         'id' => '',
-    ]
+    ],
+
+    'set_routes' => env('USE_RAADAA_ROUTES', false),
 ];

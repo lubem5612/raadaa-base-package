@@ -37,12 +37,33 @@ class PaystackHelper
     private function initiateTransfer()
     {
         $url = config('raadaa.paystack.base_url').$this->validatedData['url'];
-        $this->response = Http::withHeaders([
+        $builder = Http::withHeaders([
             'Authorization' => 'Bearer '.config('raadaa.paystack.secret_key'),
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Cache-Control' => 'no-cache',
-        ])->withoutVerifying()->post($url, $this->validatedData['data'])->json();
+        ])->withoutVerifying();
+
+        switch ($this->validatedData['method'])
+        {
+            case 'POST' : {
+                $this->response = $builder->post($url, $this->validatedData['data'])->json();
+                break;
+            }
+            case 'GET' : {
+                $this->response = $builder->get($url)->json();
+                break;
+            }
+            case 'PATCH' : {
+                $this->response = $builder->patch($url, $this->validatedData['data'])->json();
+            }
+            case 'PUT' : {
+                $this->response = $builder->put($url, $this->validatedData['data'])->json();
+            }
+            default : {
+                abort(403, 'method not allowed');
+            }
+        }
 
         return $this;
     }
@@ -69,6 +90,7 @@ class PaystackHelper
         $this->validatedData = $this->validate($this->request, [
             'url' => 'required|string',
             'data' => 'nullable|array',
+            'method' => 'required|string|in:POST,GET,PUT,PATCH,DELETE',
         ]);
 
         return $this;
