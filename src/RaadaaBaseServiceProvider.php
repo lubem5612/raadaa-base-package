@@ -29,7 +29,6 @@ class RaadaaBaseServiceProvider extends ServiceProvider
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/raadaa.php', 'raadaa-base');
-        $this->mergeConfigFrom(__DIR__ . '/../config/endpoints.php', 'endpoints');
         $this->mergeConfigFrom(__DIR__.'/../config/filesystems.php', 'filesystems');
 
         // Register the main class to use with the facade
@@ -57,10 +56,6 @@ class RaadaaBaseServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/raadaa.php' => config_path('raadaa.php'),
         ], 'raadaa-config');
-
-        $this->publishes([
-            __DIR__ . '/../config/endpoints.php' => config_path('endpoints.php'),
-        ], 'raadaa-endpoints');
 
         $this->publishes([
             __DIR__ . '/../config/filesystems.php' => config_path('filesystems.php'),
