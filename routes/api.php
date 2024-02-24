@@ -4,7 +4,7 @@ use \Illuminate\Support\Facades\Route;
 use \RaadaaPartners\RaadaaBase\Http\Controllers\ResourceController;
 
 if (config('raadaa.set_routes')) {
-    $prefix = config('endpoints.prefix')? config('raadaa.endpoints.prefix') : 'raadaa';
+    $prefix = config('raadaa.endpoints.prefix')? config('raadaa.endpoints.prefix') : 'raadaa';
 
     Route::group(['as' => 'raadaa.'], function () use($prefix){
         //resource controller routes
