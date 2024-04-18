@@ -73,7 +73,7 @@ trait ResponseHelper
 
     public function sendServerError(\Exception $exception, $code=500)
     {
-        if ($this->isValidationError($exception)) {
+        if (Str::contains($exception->getTraceAsString(), 'ValidationHelper.php')) {
             $code = 422;
             $response = [
                 "success" => false,
@@ -89,7 +89,7 @@ trait ResponseHelper
                 "errors" => $this->formatServerError($exception),
             ];
         }
-        if (config('app.env') == 'development') Log::error($exception->getTraceAsString());
+        if (config('app.env') == 'local') Log::error($exception->getTraceAsString());
 
         return response()->json($response, $code, [], JSON_INVALID_UTF8_SUBSTITUTE );
     }
