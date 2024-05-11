@@ -22,6 +22,7 @@ class SearchResource
     private $perPage = 10;
     private $startAt = '';
     private $endAt = '';
+    private $table = '';
     private $resources = [];
 
     public function __construct(array $request)
@@ -33,15 +34,15 @@ class SearchResource
     public function execute()
     {
         try {
-            return $this
-                ->validateAndSetDefaults()
-                ->setModel()
-                ->setModelRelationship()
-                ->searchTerms()
-                ->filterWithTimeStamps()
-                ->filterWithOrder()
-                ->getResources()
-                ->sendSuccess($this->resources, 'resources returned');
+            $this->validateAndSetDefaults();
+            $this->setModel();
+            $this->setModelRelationship();
+            $this->setRouteTable();
+            $this->searchTerms();
+            $this->filterWithTimeStamps();
+            $this->filterWithOrder();
+            $this->getResources();
+            return $this->sendSuccess($this->resources, "{$this->table} data retrieved successfully");
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }
@@ -94,6 +95,14 @@ class SearchResource
         if (array_key_exists('relationships', $this->route) && count($this->route['relationships']) > 0) {
             $this->relationships = $this->route['relationships'];
             $this->queryBuilder = $this->queryBuilder->with($this->relationships);
+        }
+        return $this;
+    }
+
+    private function setRouteTable()
+    {
+        if (array_key_exists('table', $this->route) && $this->route['table']) {
+            $this->table = $this->route['table'];
         }
         return $this;
     }
