@@ -36,9 +36,9 @@ class PaystackHelper
 
     private function initiateTransfer()
     {
-        $url = config('raadaa.paystack.base_url').$this->validatedData['url'];
+        $url = env('PAYSTACK_BASE_URL', 'https://api.paystack.co').$this->validatedData['url'];
         $builder = Http::withHeaders([
-            'Authorization' => 'Bearer '.config('raadaa.paystack.secret_key'),
+            'Authorization' => 'Bearer '.env('PAYSTACK_SECRET_KEY', null),
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Cache-Control' => 'no-cache',
