@@ -9,12 +9,13 @@ use Carbon\Carbon;
 trait SearchHelper
 {
     use ResponseHelper;
-    private $output, $queryBuilder, $relationshipArray, $searchParam, $perPage, $startAt, $endAt, $id;
+    private $output, $queryBuilder, $relationshipArray, $searchParam, $perPage, $startAt, $endAt, $id, $httpRequest;
 
     public function __construct($model, array $relationshipArray=[], $id=null)
     {
         $this->relationshipArray = $relationshipArray;
         $this->queryBuilder = $model::query();
+        $this->httpRequest = request();
         $this->searchParam = request()->query("search");
         $this->perPage = request()->query("per_page");
         $this->endAt = request()->query("end");

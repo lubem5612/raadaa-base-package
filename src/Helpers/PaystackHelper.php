@@ -56,12 +56,15 @@ class PaystackHelper
             }
             case 'PATCH' : {
                 $this->response = $builder->patch($url, $this->validatedData['data'])->json();
+                break;
             }
             case 'PUT' : {
                 $this->response = $builder->put($url, $this->validatedData['data'])->json();
+                break;
             }
             default : {
                 abort(403, 'method not allowed');
+                break;
             }
         }
 
