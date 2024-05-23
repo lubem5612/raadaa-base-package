@@ -9,7 +9,7 @@ use Carbon\Carbon;
 trait SearchHelper
 {
     use ResponseHelper;
-    private $output, $queryBuilder, $relationshipArray, $searchParam, $perPage, $startAt, $endAt, $id, $httpRequest;
+    private $output, $queryBuilder, $relationshipArray, $searchParam, $perPage, $startAt, $endAt, $id, $httpRequest, $page;
 
     public function __construct($model, array $relationshipArray=[], $id=null)
     {
@@ -20,6 +20,7 @@ trait SearchHelper
         $this->perPage = request()->query("per_page");
         $this->endAt = request()->query("end");
         $this->startAt = request()->query("start");
+        $this->page = request()->query('page');
         $this->id = $id;
     }
 
@@ -73,7 +74,7 @@ trait SearchHelper
     private function handlePagination()
     {
         if (is_null($this->id) && !isset($this->id)) {
-            if (isset($this->perPage)) {
+            if (isset($this->perPage) || isset($this->page)) {
                 $this->output = $this->queryBuilder->paginate($this->perPage);
             }else
                 $this->output = $this->queryBuilder->get();
