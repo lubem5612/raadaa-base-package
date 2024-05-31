@@ -17,7 +17,7 @@ trait SearchHelper
     private ?string $startAt;
     private ?string $endAt;
     private $id;
-    private ?Request httpRequest;
+    private ?Request $httpRequest;
     private ?int $page;
     private $model;
     private ?string $table;
