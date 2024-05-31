@@ -80,8 +80,9 @@ trait SearchHelper
     protected function handlePagination()
     {
         if (is_null($this->id) && !isset($this->id)) {
-            if (isset($this->perPage) || isset($this->page)) {
-                $this->output = $this->queryBuilder->paginate($this->perPage);
+            if (isset($this->page)) {
+                $perPage = isset($this->perPage)? $this->perPage : 10;
+                $this->output = $this->queryBuilder->paginate($perPage);
             }else
                 $this->output = $this->queryBuilder->get();
         }
