@@ -5,7 +5,6 @@ namespace RaadaaPartners\RaadaaBase\Actions\Resource;
 
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use RaadaaPartners\RaadaaBase\Helpers\ResponseHelper;
 
 class SearchResource
@@ -19,11 +18,12 @@ class SearchResource
     private $routeConfig = [];
     private $queryBuilder;
     private $searchParam;
-    private $perPage = 10;
+    private $perPage;
     private $startAt = '';
     private $endAt = '';
     private $table = '';
     private $resources = [];
+    private $page;
 
     public function __construct(array $request)
     {
@@ -71,8 +71,9 @@ class SearchResource
 
     private function getResources()
     {
-        if (isset($this->perPage)) {
-            $this->resources = $this->queryBuilder->paginate($this->perPage);
+        if (isset($this->page)) {
+            $perPage = isset($this->perPage)? $this->perPage : 10;
+            $this->resources = $this->queryBuilder->paginate($perPage);
         }else
             $this->resources = $this->queryBuilder->get();
         return $this;
@@ -115,6 +116,7 @@ class SearchResource
         $this->endAt = request()->query('end');
         $this->searchParam = request()->query("search");
         $this->perPage = request()->query("per_page");
+        $this->page = request()->query('page');
         return $this;
     }
 }

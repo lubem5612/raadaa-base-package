@@ -9,7 +9,18 @@ use Carbon\Carbon;
 trait SearchHelper
 {
     use ResponseHelper;
-    private $output, $queryBuilder, $relationshipArray, $searchParam, $perPage, $startAt, $endAt, $id, $httpRequest, $page, $model;
+    private $output;
+    private $queryBuilder;
+    private array $relationshipArray;
+    private string $searchParam;
+    private ?int $perPage;
+    private ?string $startAt;
+    private ?string $endAt;
+    private $id;
+    private ?Request httpRequest;
+    private ?int $page;
+    private $model;
+    private ?string $table;
 
     public function __construct($model, array $relationshipArray=[], $id=null)
     {
