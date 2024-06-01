@@ -11,16 +11,16 @@ trait SearchHelper
     use ResponseHelper;
     private $output;
     private $queryBuilder;
-    private array $relationshipArray;
-    private string $searchParam;
-    private ?int $perPage;
-    private ?string $startAt;
-    private ?string $endAt;
+    private $relationshipArray;
+    private $searchParam;
+    private $perPage;
+    private $startAt;
+    private $endAt;
     private $id;
     private $httpRequest;
-    private ?int $page;
+    private $page;
     private $model;
-    private ?string $table;
+    private $table;
 
     public function __construct($model, array $relationshipArray=[], $id=null)
     {
