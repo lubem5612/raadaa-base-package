@@ -24,10 +24,9 @@ class UpdateResource extends Action
     public function execute()
     {
         try {
-            return $this
-                ->validateRequest()
-                ->setModel()
-                ->updateResource();
+            $this->validateRequest();
+            $this->setModel();
+            return $this->updateResource();
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }

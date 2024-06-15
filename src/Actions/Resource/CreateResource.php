@@ -24,10 +24,9 @@ class CreateResource extends Action
     public function execute()
     {
         try {
-            return $this
-                ->validateRequest()
-                ->setModel()
-                ->createResource();
+            $this->validateRequest();
+            $this->setModel();
+            return $this->createResource();
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }

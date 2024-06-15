@@ -24,12 +24,11 @@ class GetResource extends Action
     public function execute()
     {
         try {
-            return $this
-                ->validateRequest()
-                ->setModel()
-                ->setModelRelationship()
-                ->getResource()
-                ->sendSuccess($this->resource, 'resource retrieved successfully');
+            $this->validateRequest();
+            $this->setModel();
+            $this->setModelRelationship();
+            $this->getResource();
+            return $this->sendSuccess($this->resource, 'resource retrieved successfully');
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }

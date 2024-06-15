@@ -19,11 +19,10 @@ class DeleteResource extends Action
     public function execute()
     {
         try {
-            return $this
-                ->validateRequest()
-                ->setModel()
-                ->deleteResource()
-                ->sendSuccess(null, 'resource deleted successfully');
+            $this->validateRequest();
+            $this->setModel();
+            $this->deleteResource();
+            $this->sendSuccess(null, 'resource deleted successfully');
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }
@@ -33,13 +32,13 @@ class DeleteResource extends Action
     {
         abort_if(!array_key_exists('model', $this->route), 401, 'model not configured');
         $this->model = $this->route['model'];
-        return $this;
     }
 
     private function deleteResource()
     {
-        $this->model::destroy($this->validatedInput['id']);
-        return $this;
+        $resource = $this->model::query()->find($this->validatedInput['id']);
+        if (empty($resource)) abort(404, 'resource not found');
+        $resource->delete();
     }
 
     private function validateRequest()
@@ -47,11 +46,9 @@ class DeleteResource extends Action
         abort_unless(array_key_exists($this->request['endpoint'], $this->routeConfig), 401, 'endpoint not found');
         $this->route = $this->routeConfig[$this->request['endpoint']];
 
-        $table = $this->route['table'];
         $this->validatedInput = $this->validate($this->request, [
-            'id' => ["required", "exists:$table,id"],
-            "endpoint" => ["string", "required"],
+            "id" => "required",
+            "endpoint" => "required|string",
         ]);
-        return $this;
     }
 }
