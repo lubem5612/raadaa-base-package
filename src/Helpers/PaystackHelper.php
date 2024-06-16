@@ -5,6 +5,7 @@ namespace RaadaaPartners\RaadaaBase\Helpers;
 
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -24,11 +25,10 @@ class PaystackHelper
     public function execute()
     {
         try {
-            return $this
-                ->validateRequest()
-                ->generateReference()
-                ->initiateTransfer()
-                ->buildResponse();
+            $this->validateRequest();
+            $this->generateReference();
+            $this->initiateTransfer();
+            return $this->buildResponse();
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }
@@ -79,12 +79,14 @@ class PaystackHelper
             }
             return $this->sendSuccess(null, $this->response['message']);
         }
-        return $this->sendError('error in paystack api call');
+        return $this->sendError('error in paystack api call', ['errors' => $this->response]);
     }
 
     private function generateReference()
     {
-        $this->validatedData['data']['reference'] = 'transave-'.Carbon::now()->format('YmdHi').'-'.strtolower(Str::random(9));
+        if (Arr::exists($this->validatedData, 'data') && !Arr::exists($this->validatedData['data'], 'reference')) {
+            $this->validatedData['data']['reference'] = 'transave-'.Carbon::now()->format('YmdHi').'-'.strtolower(Str::random(9));
+        }
         return $this;
     }
 
