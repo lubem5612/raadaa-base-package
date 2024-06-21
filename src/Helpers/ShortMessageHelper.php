@@ -7,7 +7,7 @@ namespace RaadaaPartners\RaadaaBase\Helpers;
 use Illuminate\Support\Facades\Http;
 
 
-trait ShortMessageHelper
+class ShortMessageHelper
 {
     use ValidationHelper, ResponseHelper, PhoneHelper;
     private $request, $validatedData, $response;
