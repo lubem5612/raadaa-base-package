@@ -29,7 +29,8 @@ class UploadHelper
 
             $path = $uploadedFile->storePubliclyAs($folder, $filename, $this->disk);
             if ($path) {
-                $this->uploadedFilePath = $this->storageConfig['storage_url'].'/'.config('raadaa.storage.prefix').'/'.$path;
+                $this->uploadedFilePath = (config('raadaa.storage.prefix'))?
+                    $this->storageConfig['storage_url'].'/'.config('raadaa.storage.prefix').'/'.$path : $this->storageConfig['storage_url'].'/'.$path;
                 $this->uploadedFileSize = $uploadedFile->getSize();
                 $this->uploadedFileExtension = $extension;
                 $this->isSuccessful = true;
@@ -87,7 +88,7 @@ class UploadHelper
 
     private function setRealPath($url)
     {
-        $prefix = config('raadaa.storage.prefix').'/';
+        $prefix = config('raadaa.storage.prefix')? config('raadaa.storage.prefix').'/' : $this->storageConfig['storage_url'].'/';
         $this->fileRealPath = Str::after($url, $prefix);
     }
 
