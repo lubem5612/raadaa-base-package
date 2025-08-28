@@ -26,11 +26,12 @@ class UploadHelper
             $this->setStorageConfig();
             $extension = $uploadedFile->getClientOriginalExtension();
             $filename = uniqid().'.'.$extension;
-
-            $path = $uploadedFile->storePubliclyAs($folder, $filename, $this->disk);
+            $fullFolder = ($this->disk == 'azure') ? $folder : config('raadaa.storage.prefix').'/'.$folder;
+            $fullFolder = Str::replace('//', '/', $fullFolder);
+            $path = ($this->disk == 'azure')? $uploadedFile->storePubliclyAs($fullFolder, $filename, $this->disk) : '';
             if ($path) {
-                $this->uploadedFilePath = (config('raadaa.storage.prefix'))?
-                    $this->storageConfig['storage_url'].'/'.config('raadaa.storage.prefix').'/'.$path : $this->storageConfig['storage_url'].'/'.$path;
+                $this->uploadedFilePath = ($this->disk == 'azure')?
+                    $this->storageConfig['storage_url'].'/'.config('raadaa.storage.prefix').'/'.$path : Storage::disk($this->disk)->url( $path );
                 $this->uploadedFileSize = $uploadedFile->getSize();
                 $this->uploadedFileExtension = $extension;
                 $this->isSuccessful = true;
@@ -88,7 +89,7 @@ class UploadHelper
 
     private function setRealPath($url)
     {
-        $prefix = config('raadaa.storage.prefix')? config('raadaa.storage.prefix').'/' : $this->storageConfig['storage_url'].'/';
+        $prefix = ($this->disk == 'azure')? config('raadaa.storage.prefix').'/' : $this->storageConfig['storage_url'].'/';
         $this->fileRealPath = Str::after($url, $prefix);
     }
 

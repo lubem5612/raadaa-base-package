@@ -10,7 +10,7 @@ return [
     ],
 
     'storage' => [
-        'prefix' => env('STORAGE_PREFIX', ''),
+        'prefix' => env('STORAGE_PREFIX', 'raadaa'),
         'driver' => env('STORAGE_DRIVER', 'local'),
     ],
 
